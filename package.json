@@ -1,0 +1,22 @@
+{
+  "name": "taxidriverhk-csmaps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "ts-node app.ts",
+    "start": "node build/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.26.2",
+    "fastify-cli": "^6.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "typescript": "^5.4.3"
+  }
+}
