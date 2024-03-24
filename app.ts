@@ -1,6 +1,6 @@
+import fastifyPostgres from "@fastify/postgres";
 import fastify from "fastify";
-
-import { getDatabase } from "./database/init";
+import { getConnectionString, usingDatabase } from "./database/init";
 import { GetMapsResponse } from "./schemas";
 
 const server = fastify({
@@ -8,15 +8,21 @@ const server = fastify({
     level: "info",
   },
 });
-const db = getDatabase();
+
+const connectionString = getConnectionString();
+if (connectionString) {
+  server.register(fastifyPostgres, {
+    connectionString,
+  });
+}
 
 server.get<{
   Reply: GetMapsResponse;
 }>("/maps", async (_request, _reply) => {
-  return {
+  return await usingDatabase(server, async (db) => ({
     categories: [],
     maps: await db.mapsAsync(),
-  };
+  }));
 });
 
 server.listen({ port: 8090 }, (err, address) => {

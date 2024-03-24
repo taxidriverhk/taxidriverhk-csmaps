@@ -5,18 +5,22 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "dev": "ts-node app.ts",
+    "dev": "npx ts-node -r dotenv/config app.ts",
     "start": "node build/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/postgres": "^5.2.2",
+    "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
-    "fastify-cli": "^6.1.1"
+    "fastify-cli": "^6.1.1",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "@types/pg": "^8.11.4",
     "typescript": "^5.4.3"
   }
 }

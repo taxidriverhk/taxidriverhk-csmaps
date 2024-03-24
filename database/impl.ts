@@ -1,5 +1,35 @@
+import { PoolClient } from "pg";
 import { GameVersion, Map, ReleaseStatus, Tutorial } from "../schemas";
-import { MapDatabase } from "./types";
+import { MapDatabase, Nullable } from "./types";
+
+export class SqlMapDatabase extends MapDatabase {
+  sqlClient: PoolClient;
+
+  constructor(sqlClient: PoolClient) {
+    super();
+    this.sqlClient = sqlClient;
+  }
+
+  close(): void {
+    this.sqlClient.release();
+  }
+
+  async mapsAsync(): Promise<Array<Map>> {
+    return [];
+  }
+
+  async mapAsync(_name: string): Promise<Nullable<Map>> {
+    return null;
+  }
+
+  async tutorialsAsync(): Promise<Array<Tutorial>> {
+    return [];
+  }
+
+  async tutorialAsync(_id: string): Promise<Nullable<Tutorial>> {
+    return null;
+  }
+}
 
 export class MockMapDatabase extends MapDatabase {
   async mapsAsync(): Promise<Array<Map>> {
@@ -51,7 +81,7 @@ export class MockMapDatabase extends MapDatabase {
     ];
   }
 
-  async mapAsync(_name: string): Promise<Map> {
+  async mapAsync(_name: string): Promise<Nullable<Map>> {
     return (await this.mapsAsync())[0];
   }
 
@@ -364,7 +394,7 @@ export class MockMapDatabase extends MapDatabase {
     ];
   }
 
-  async tutorialAsync(_id: string): Promise<Tutorial> {
+  async tutorialAsync(_id: string): Promise<Nullable<Tutorial>> {
     return (await this.tutorialsAsync())[0];
   }
 }
