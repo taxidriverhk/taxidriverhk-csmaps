@@ -19,10 +19,16 @@ if (connectionString) {
 server.get<{
   Reply: GetMapsResponse;
 }>("/maps", async (_request, _reply) => {
-  return await usingDatabase(server, async (db) => ({
-    categories: [],
-    maps: await db.mapsAsync(),
-  }));
+  return await usingDatabase(server, async (db) => {
+    const [categories, maps] = await Promise.all([
+      db.categoriesAsync(),
+      db.mapsAsync(),
+    ]);
+    return {
+      categories,
+      maps,
+    };
+  });
 });
 
 server.listen({ port: 8090 }, (err, address) => {

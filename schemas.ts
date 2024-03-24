@@ -12,38 +12,39 @@ export enum GameVersion {
 
 export type Category = {
   abbr: string;
+  full_name: string;
   id: number;
-  fullName: string;
 };
 
 export type Map = {
-  categoryId: number;
-  downloadLinks?: Array<string>;
-  fullName: string;
+  category_id: number;
+  download_links?: Array<string>;
+  full_name: string;
   icon: string;
   id: number;
   images?: Array<{
     url: string;
     caption?: string;
   }>;
-  maxPlayers: number;
+  max_players: number;
   name: string;
-  progressPercentage?: number;
-  version: string;
-  releaseDate: string;
+  progress_percentage?: number;
+  release_date?: Date;
   status: ReleaseStatus;
-  targetGameVersion: GameVersion;
+  target_game_version: GameVersion;
+  update_date: Date;
+  version: string;
 };
 
 export type Tutorial = {
-  title: string;
-  hashKey: string;
   content: string;
-  creationDate: string;
-  lastUpdateDate: string;
+  creation_date: Date;
+  is_draft: boolean;
+  hash_key: string;
+  last_update_date?: Date;
+  target_game_version: GameVersion;
   thumbnail: string;
-  targetGameVersion: GameVersion;
-  isDraft: boolean;
+  title: string;
 };
 
 // API models
