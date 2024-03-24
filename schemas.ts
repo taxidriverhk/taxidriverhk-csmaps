@@ -52,3 +52,7 @@ export type GetMapsResponse = {
   categories: Array<Category>;
   maps: Array<Partial<Map>>;
 };
+
+export type GetTutorialsResponse = {
+  tutorials: Array<Tutorial>;
+};

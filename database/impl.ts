@@ -32,16 +32,27 @@ export class SqlMapDatabase extends MapDatabase {
     return rows;
   }
 
-  async mapAsync(_name: string): Promise<Nullable<Map>> {
-    return null;
+  async mapAsync(name: string): Promise<Nullable<Map>> {
+    const { rowCount, rows } = await this.sqlClient.query<Map>(
+      "SELECT * FROM maps WHERE name = $1",
+      [name]
+    );
+    return rowCount == null || rowCount < 1 ? null : rows[0];
   }
 
   async tutorialsAsync(): Promise<Array<Tutorial>> {
-    return [];
+    const { rows } = await this.sqlClient.query<Tutorial>(
+      "SELECT * FROM tutorials"
+    );
+    return rows;
   }
 
-  async tutorialAsync(_id: string): Promise<Nullable<Tutorial>> {
-    return null;
+  async tutorialAsync(id: string): Promise<Nullable<Tutorial>> {
+    const { rowCount, rows } = await this.sqlClient.query<Tutorial>(
+      "SELECT * FROM tutorials WHERE hash_key = $1",
+      [id]
+    );
+    return rowCount == null || rowCount < 1 ? null : rows[0];
   }
 }
 
@@ -111,7 +122,7 @@ export class MockMapDatabase extends MapDatabase {
         hash_key: "play-your-own-addon-map",
         content: `
 # Test Header
-Test conent with a \`code block\` here.
+Test content with a \`code block\` here.
     `,
         creation_date: new Date("2023-10-30"),
         last_update_date: new Date("2023-12-26"),
