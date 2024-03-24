@@ -28,7 +28,9 @@ export class SqlMapDatabase extends MapDatabase {
   }
 
   async mapsAsync(): Promise<Array<Map>> {
-    const { rows } = await this.sqlClient.query<Map>("SELECT * FROM maps");
+    const { rows } = await this.sqlClient.query<Map>(
+      "SELECT category_id, icon, name, progress_percentage, release_date, status, target_game_version, update_date FROM maps"
+    );
     return rows;
   }
 
@@ -42,7 +44,7 @@ export class SqlMapDatabase extends MapDatabase {
 
   async tutorialsAsync(): Promise<Array<Tutorial>> {
     const { rows } = await this.sqlClient.query<Tutorial>(
-      "SELECT * FROM tutorials"
+      "SELECT creation_date, is_draft, hash_key, last_update_date, target_game_version, thumbnail, title FROM tutorials"
     );
     return rows;
   }

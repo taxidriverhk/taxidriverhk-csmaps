@@ -82,7 +82,7 @@ server.get<{
   }
 });
 
-server.listen({ port: 8090 }, (err, address) => {
+server.listen({ port: 8090, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     server.log.error(err);
     process.exit(1);
