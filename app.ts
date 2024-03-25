@@ -43,9 +43,12 @@ server.get<{
   Reply: MapItem;
 }>("/maps/:name", async (request, reply) => {
   const { name } = request.params;
-  const map = await usingDatabase(
-    server,
-    async (db) => await db.mapAsync(name)
+  const idNumber = parseInt(name, 10);
+
+  const map = await usingDatabase(server, async (db) =>
+    Number.isNaN(idNumber)
+      ? await db.mapAsync(name)
+      : await db.mapAsyncById(name)
   );
 
   if (map != null) {

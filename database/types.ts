@@ -8,6 +8,7 @@ export abstract class MapDatabase {
   abstract categoriesAsync(): Promise<Array<Category>>;
   abstract mapsAsync(): Promise<Array<Map>>;
   abstract mapAsync(name: string): Promise<Nullable<Map>>;
+  abstract mapAsyncById(id: string): Promise<Nullable<Map>>;
   abstract tutorialsAsync(): Promise<Array<Tutorial>>;
   abstract tutorialAsync(id: string): Promise<Nullable<Tutorial>>;
 }

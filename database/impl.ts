@@ -36,8 +36,16 @@ export class SqlMapDatabase extends MapDatabase {
 
   async mapAsync(name: string): Promise<Nullable<Map>> {
     const { rowCount, rows } = await this.sqlClient.query<Map>(
-      "SELECT * FROM maps WHERE name = $1",
+      "SELECT * FROM maps WHERE name = $1 AND status <> 2",
       [name]
+    );
+    return rowCount == null || rowCount < 1 ? null : rows[0];
+  }
+
+  async mapAsyncById(id: string): Promise<Nullable<Map>> {
+    const { rowCount, rows } = await this.sqlClient.query<Map>(
+      "SELECT * FROM maps WHERE id = $1 AND status <> 2",
+      [id]
     );
     return rowCount == null || rowCount < 1 ? null : rows[0];
   }
@@ -114,6 +122,10 @@ export class MockMapDatabase extends MapDatabase {
   }
 
   async mapAsync(_name: string): Promise<Nullable<Map>> {
+    return (await this.mapsAsync())[0];
+  }
+
+  async mapAsyncById(_id: string): Promise<Nullable<Map>> {
     return (await this.mapsAsync())[0];
   }
 
