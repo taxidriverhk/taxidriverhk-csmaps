@@ -4,6 +4,7 @@ import {
   GameVersion,
   Map,
   ReleaseStatus,
+  Statistics,
   Tutorial,
 } from "../schemas";
 import { MapDatabase, Nullable } from "./types";
@@ -48,6 +49,39 @@ export class SqlMapDatabase extends MapDatabase {
       [id]
     );
     return rowCount == null || rowCount < 1 ? null : rows[0];
+  }
+
+  async statisticsAsync(): Promise<Statistics> {
+    const [mapQueryCounts, tutorialQueryCounts] = await Promise.all([
+      this.sqlClient.query<{
+        released_count: number;
+        in_progress_count: number;
+        unavailable_count: number;
+      }>(
+        "SELECT" +
+          " COUNT(*) FILTER (WHERE status = 0) AS released_count," +
+          " COUNT(*) FILTER (WHERE status = 1) AS in_progress_count," +
+          " COUNT(*) FILTER (WHERE status = 2) AS unavailable_count" +
+          " FROM maps"
+      ),
+      this.sqlClient.query<{ count: number }>(
+        "SELECT COUNT(*) FROM tutorials WHERE is_draft = FALSE"
+      ),
+    ]);
+
+    const {
+      rows: [{ released_count, in_progress_count, unavailable_count }],
+    } = mapQueryCounts;
+    const {
+      rows: [{ count: tutorialsCount }],
+    } = tutorialQueryCounts;
+
+    return {
+      num_released_maps: released_count,
+      num_in_progress_maps: in_progress_count,
+      num_unavailable_maps: unavailable_count,
+      num_tutorials: tutorialsCount,
+    };
   }
 
   async tutorialsAsync(): Promise<Array<Tutorial>> {
@@ -127,6 +161,15 @@ export class MockMapDatabase extends MapDatabase {
 
   async mapAsyncById(_id: string): Promise<Nullable<Map>> {
     return (await this.mapsAsync())[0];
+  }
+
+  async statisticsAsync(): Promise<Statistics> {
+    return {
+      num_released_maps: 0,
+      num_in_progress_maps: 1,
+      num_unavailable_maps: 2,
+      num_tutorials: 3,
+    };
   }
 
   async tutorialsAsync(): Promise<Array<Tutorial>> {

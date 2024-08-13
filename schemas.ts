@@ -36,6 +36,13 @@ export type Map = {
   version: string;
 };
 
+export type Statistics = {
+  num_released_maps: number;
+  num_in_progress_maps: number;
+  num_unavailable_maps: number;
+  num_tutorials: number;
+};
+
 export type Tutorial = {
   content: string;
   creation_date: Date;
@@ -51,6 +58,10 @@ export type Tutorial = {
 export type GetMapsResponse = {
   categories: Array<Category>;
   maps: Array<Partial<Map>>;
+};
+
+export type GetStatisticsResponse = {
+  statistics: Statistics;
 };
 
 export type GetTutorialsResponse = {

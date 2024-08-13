@@ -3,6 +3,7 @@ import fastify from "fastify";
 import { getConnectionString, usingDatabase } from "./database/init";
 import {
   GetMapsResponse,
+  GetStatisticsResponse,
   GetTutorialsResponse,
   Map as MapItem,
   Tutorial,
@@ -56,6 +57,14 @@ server.get<{
   } else {
     reply.status(404);
   }
+});
+
+server.get<{
+  Reply: GetStatisticsResponse;
+}>("/statistics", async (_request, _reply) => {
+  return await usingDatabase(server, async (db) => ({
+    statistics: await db.statisticsAsync(),
+  }));
 });
 
 server.get<{
